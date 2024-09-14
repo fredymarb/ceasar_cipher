@@ -1,4 +1,4 @@
-class CeasarCipher # rubocop:disable Style/Documentation
+class CeasarCipher
   def encrypt(message, shift)
     result = ""
 
