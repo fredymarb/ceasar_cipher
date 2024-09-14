@@ -1,24 +1,28 @@
-def ceasar_cipher(string, shift_factor)
-  # ensure shift_factor is within 0 - 26 range
-  shift_factor = shift_factor % 26
+class CeasarCipher # rubocop:disable Style/Documentation
+  def encrypt(message, shift)
+    result = ""
 
-  encrypted_string = ""
-
-  string.each_char do |char|
-    if char.match?(/[a-z]/) # shift lowercase alphabets
-      new_char = (((char.ord - "a".ord + shift_factor) % 26) + "a".ord).chr
-      encrypted_string += new_char
-    elsif char.match?(/[A-Z]/) # shift uppercase alphabets
-      new_char = (((char.ord - "A".ord + shift_factor) % 26) + "A".ord).chr
-      encrypted_string += new_char
-    else
-      # leave non-alphabet character untouched
-      encrypted_string += char
+    message.each_char do |char|
+      base = char.ord < 91 ? 65 : 97
+      result << char_shift(char, base, shift)
     end
+
+    result
   end
 
-  encrypted_string
+  private
+
+  def char_shift(char, base, shift)
+    char_num = char.ord
+
+    if char_num.between?(65, 90) || char_num.between?(97, 122)
+      rotation = (((char_num - base) + shift) % 26) + base
+      rotation.chr
+    else
+      char
+    end
+  end
 end
 
-puts ceasar_cipher("what a string!", 5) #returns => bmfy f xywnsl!
-puts ceasar_cipher("Hello, World!", 3) #returns => Khoor, Zruog!
+cipher = CeasarCipher.new
+puts cipher.encrypt("Hello, World!", 3)
